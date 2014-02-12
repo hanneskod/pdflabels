@@ -1,4 +1,26 @@
 pdflabels
 =========
 
-Print labels to PDF
+Write a grid of labels to a pdf
+
+
+Installation using composer
+---------------------------
+Simply add `ledgr/pdflabels` to your list of required libraries.
+
+
+Usage
+-----
+    namespace ledgr\pdflabels;
+
+    include "vendor/autoload.php";
+
+    $addresses = json_decode(file_get_contents('addresses.json'));
+
+    $labels = LabelsFactory::createStd();
+
+    foreach ($addresses as $address) {
+        $labels->addCell(implode("\n", $address));
+    }
+
+    echo $labels->getPdf();
