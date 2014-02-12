@@ -1,6 +1,6 @@
 {
     "name": "ledgr/pdflabels",
-    "description": "Print labels to PDF",
+    "description": "Render pdfs using a grid of labels",
     "keywords": ["label", "pdf"],
     "homepage": "https://github.com/ledgr/pdflabels",
     "type": "library",
