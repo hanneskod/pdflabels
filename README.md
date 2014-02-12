@@ -1,5 +1,6 @@
 pdflabels
 =========
+[![Build Status](https://travis-ci.org/ledgr/pdflabels.png?branch=master)](https://travis-ci.org/ledgr/pdflabels)
 
 Write a grid of labels to a pdf
 
