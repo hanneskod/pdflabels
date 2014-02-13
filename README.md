@@ -3,9 +3,13 @@
 Render pdfs using a grid of labels
 
 
-Installation using composer
----------------------------
+## Installation using [composer](http://getcomposer.org/)
+
 Simply add `ledgr/pdflabels` to your list of required libraries.
+
+
+## License
+[GPL](/LICENSE)
 
 
 Usage
