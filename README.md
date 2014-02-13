@@ -1,4 +1,4 @@
-# PDF-labels [![Build Status](https://travis-ci.org/ledgr/pdflabels.png?branch=master)](https://travis-ci.org/ledgr/pdflabels) [![Code Coverage](https://scrutinizer-ci.com/g/ledgr/pdflabels/badges/coverage.png?s=ea2b5dc71bbb041b5f7a050acf533932e87142a7)](https://scrutinizer-ci.com/g/ledgr/pdflabels/)
+# PDF-labels [![Build Status](https://travis-ci.org/ledgr/pdflabels.png?branch=master)](https://travis-ci.org/ledgr/pdflabels) [![Code Coverage](https://scrutinizer-ci.com/g/ledgr/pdflabels/badges/coverage.png?s=ea2b5dc71bbb041b5f7a050acf533932e87142a7)](https://scrutinizer-ci.com/g/ledgr/pdflabels/) [![Dependency Status](https://gemnasium.com/ledgr/pdflabels.png)](https://gemnasium.com/ledgr/pdflabels)
 
 Render pdfs using a grid of labels
 
