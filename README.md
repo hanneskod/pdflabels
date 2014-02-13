@@ -4,6 +4,7 @@ Render pdfs using a grid of labels
 
 __License__: [GPL](/LICENSE)
 
+![Example output](/example/addresses.png)
 
 ## Installation using [composer](http://getcomposer.org/)
 

@@ -32,7 +32,7 @@ class LabelsFactory
         return new Labels(
             array(
                 'font' => array(
-                    'size' => 8
+                    'size' => 11
                 ),
                 'cell' => array(
                     'size' => array(
