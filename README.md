@@ -2,14 +2,12 @@
 
 Render pdfs using a grid of labels
 
+__License__: [GPL](/LICENSE)
+
 
 ## Installation using [composer](http://getcomposer.org/)
 
 Simply add `ledgr/pdflabels` to your list of required libraries.
-
-
-## License
-[GPL](/LICENSE)
 
 
 Usage
