@@ -44,7 +44,9 @@ class Cell
         )
     );
 
-    private $contentEdge, $paddingEdge, $maginEdge;
+    private $contentEdge, $paddingEdge, $marginEdge;
+
+    public $size, $padding, $margin;
 
     public function __construct(array $values)
     {
