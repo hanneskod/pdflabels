@@ -39,12 +39,18 @@ class Labels extends FPDF_EXTENDED
         ),
         'cell' => array(
             'size' => array(
-                'width' => 60,
-                'height' => 20
+                'width' => 70,
+                'height' => 30
             ),
             'spacing' => array(
-                'vertical' => 5,
-                'horizontal' => 5
+                'vertical' => 0,
+                'horizontal' => 0
+            ),
+            'margin' => array(
+                'top' => 0,
+                'right' => 0,
+                'bottom' => 0,
+                'left' => 0
             )
         ),
         'page' => array(
@@ -53,10 +59,10 @@ class Labels extends FPDF_EXTENDED
                 'height' => 297
             ),
             'margin' => array(
-                'top' => 10,
-                'right' => 10,
-                'bottom' => 10,
-                'left' => 10
+                'top' => 0,
+                'right' => 0,
+                'bottom' => 0,
+                'left' => 0
             )
         )
     );

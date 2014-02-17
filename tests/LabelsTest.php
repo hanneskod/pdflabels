@@ -73,45 +73,29 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(50, $labels->getLineHeight());
     }
 
+    public function testGetLineHeightFromPreset()
+    {
+        $labels = new Labels(array('lineHeight' => 1000));
+        $this->assertEquals(1000, $labels->getLineHeight());
+    }
+
     public function testGetNrOfCols()
     {
         $labels = new Labels(
             array(
-                'page' => array(
-                    'size' => array('width' => 200),
-                    'margin' => array(
-                        'left' => 50,
-                        'right' => 50,
-                    )
-                ),
-                'cell' => array(
-                    'size' => array('width' => 50),
-                    'spacing' => array(
-                        'vertical' => 0
-                    )
-                )
+                'page' => array('size' => array('width' => 200)),
+                'cell' => array('size' => array('width' => 50))
             )
         );
-        $this->assertEquals(2, $labels->getNrOfCols());
+        $this->assertEquals(4, $labels->getNrOfCols());
     }
 
     public function testGetNrOfRows()
     {
         $labels = new Labels(
             array(
-                'page' => array(
-                    'size' => array('width' => 100),
-                    'margin' => array(
-                        'left' => 0,
-                        'right' => 0,
-                    )
-                ),
-                'cell' => array(
-                    'size' => array('width' => 50),
-                    'spacing' => array(
-                        'vertical' => 0
-                    )
-                )
+                'page' => array('size' => array('width' => 100)),
+                'cell' => array('size' => array('width' => 50))
             )
         );
         $this->assertEquals(0, $labels->getNrOfRows());
@@ -125,19 +109,8 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     {
         $labels = new Labels(
             array(
-                'page' => array(
-                    'size' => array('height' => 200),
-                    'margin' => array(
-                        'top' => 0,
-                        'bottom' => 0,
-                    )
-                ),
-                'cell' => array(
-                    'size' => array('height' => 49),
-                    'spacing' => array(
-                        'horizontal' => 0
-                    )
-                )
+                'page' => array('size' => array('height' => 200)),
+                'cell' => array('size' => array('height' => 50))
             )
         );
         $this->assertEquals(4, $labels->getNrOfRowsPerPage());
@@ -151,27 +124,17 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                     'size' => array(
                         'height' => 200,
                         'width' => 200
-                    ),
-                    'margin' => array(
-                        'top' => 0,
-                        'bottom' => 0,
-                        'left' => 50,
-                        'right' => 50,
                     )
                 ),
                 'cell' => array(
                     'size' => array(
-                        'height' => 49,
+                        'height' => 50,
                         'width' => 50
-                    ),
-                    'spacing' => array(
-                        'horizontal' => 0,
-                        'vertical' => 0
                     )
                 )
             )
         );
-        $this->assertEquals(8, $labels->getNrOfCellsPerPage());        
+        $this->assertEquals(16, $labels->getNrOfCellsPerPage());        
     }
 
     public function testGetGrid()
@@ -182,22 +145,12 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                     'size' => array(
                         'height' => 10,
                         'width' => 10
-                    ),
-                    'margin' => array(
-                        'top' => 0,
-                        'left' => 0,
-                        'right' => 0,
-                        'bottom' => 0
                     )
                 ),
                 'cell' => array(
                     'size' => array(
-                        'height' => 9,
-                        'width' => 9
-                    ),
-                    'spacing' => array(
-                        'horizontal' => 0,
-                        'vertical' => 0
+                        'height' => 10,
+                        'width' => 10
                     )
                 )
             )
