@@ -137,14 +137,18 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(16, $labels->getNrOfCellsPerPage());        
     }
 
-    public function testGetGrid()
+    public function testMakePdf()
     {
         $labels = new Labels(
             array(
+                'border' => true,
                 'page' => array(
                     'size' => array(
-                        'height' => 10,
-                        'width' => 10
+                        'height' => 20,
+                        'width' => 11
+                    ),
+                    'margin' => array(
+                        'left' => 1
                     )
                 ),
                 'cell' => array(
@@ -158,30 +162,39 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
 
         $labels->addCell('foo');
         $labels->addCell('bar');
+        $labels->addCell('foobar');
 
         $expected = array(
             array(
                 array(
-                    'x' => 0,
+                    'x' => 1,
                     'y' => 0,
                     'content' => 'foo'
+                ),
+                array(
+                    'x' => 1,
+                    'y' => 10,
+                    'content' => 'bar'
                 )
             ),
             array(
                 array(
-                    'x' => 0,
+                    'x' => 1,
                     'y' => 0,
-                    'content' => 'bar'
+                    'content' => 'foobar'
+                ),
+                array(
+                    'x' => 1,
+                    'y' => 10,
+                    'content' => ''
                 )
             )
         );
 
+        // Assert that grid is correct
         $this->assertEquals($expected, $labels->getGrid());
-    }
 
-    public function testGetPdfNoException()
-    {
-        $labels = new Labels;
+        // Assert that there are no exceptions while making pdf
         $this->assertTrue(!!$labels->getPdf());
     }
 }

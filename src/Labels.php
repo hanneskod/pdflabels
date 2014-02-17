@@ -37,63 +37,53 @@ class Labels extends FPDF_EXTENDED
             'family' => 'Arial',
             'size' => 10
         ),
-        'cell' => array(
-            'size' => array(
-                'width' => 70,
-                'height' => 30
-            ),
-            'spacing' => array(
-                'vertical' => 0,
-                'horizontal' => 0
-            ),
-            'margin' => array(
-                'top' => 0,
-                'right' => 0,
-                'bottom' => 0,
-                'left' => 0
-            )
-        ),
+        'cell' => array(),
         'page' => array(
             'size' => array(
                 'width' => 210,
                 'height' => 297
-            ),
-            'margin' => array(
-                'top' => 0,
-                'right' => 0,
-                'bottom' => 0,
-                'left' => 0
             )
         )
     );
 
-    private $cells = array();
+    private $pageBox, $cellBox, $cells;
 
     public function __construct(array $settings = null)
     {
         $this->settings = array_replace_recursive($this->settings, (array)$settings);
 
+        $this->pageBox = new Cell($this->settings['page']);
+        $this->cellBox = new Cell($this->settings['cell']);
+        $this->cells = array();
+
         parent::__construct(
             0,
             $this->getOrientation(),
             $this->settings['unit'],
-            array_values($this->settings['page']['size'])
+            array(
+                $this->pageBox->getMarginEdge()->width,
+                $this->pageBox->getMarginEdge()->height
+            )
         );
 
         $this->SetCreator('pdflabels');
         $this->SetTitle('labels');
-        $this->SetFont($this->settings['font']['family'], '', $this->settings['font']['size']);
+        $this->SetFont(
+            $this->settings['font']['family'],
+            '',
+            $this->settings['font']['size']
+        );
         $this->Setmargins(
-            $this->settings['page']['margin']['left'],
-            $this->settings['page']['margin']['top'],
-            $this->settings['page']['margin']['right']
+            $this->pageBox->margin['left'],
+            $this->pageBox->margin['top'],
+            $this->pageBox->margin['right']
         );
         $this->SetAutoPageBreak(false);
     }
 
     public function getOrientation()
     {
-        if ($this->settings['page']['size']['width'] > $this->settings['page']['size']['height']) {
+        if ($this->pageBox->getMarginEdge()->width > $this->pageBox->getMarginEdge()->height) {
             return 'L';
         }
 
@@ -134,24 +124,12 @@ class Labels extends FPDF_EXTENDED
             return $this->settings['lineHeight'];
         }
 
-        return $this->settings['cell']['size']['height'] / $this->getNrOfLinesInLabel();
+        return $this->cellBox->getContentEdge()->height / $this->getNrOfLinesInLabel();
     }
 
     public function getNrOfCols()
     {
-        $printableWidth = $this->settings['page']['size']['width']
-            - $this->settings['page']['margin']['left']
-            - $this->settings['page']['margin']['right'];
-
-        $cols = 0;
-
-        do {
-            $cols++;
-            $currentWidth = $this->settings['cell']['size']['width'] * ($cols + 1)
-                + $this->settings['cell']['spacing']['vertical'] * $cols;
-        } while ($currentWidth <= $printableWidth);
-
-        return $cols;
+        return count($this->calcDrawEdges('width'));
     }
 
     public function getNrOfRows()
@@ -161,18 +139,7 @@ class Labels extends FPDF_EXTENDED
 
     public function getNrOfRowsPerPage()
     {
-        $printableHeight = $this->settings['page']['size']['height'] - $this->settings['page']['margin']['bottom'];
-        $rowsPerPage = 0;
-        $y = 0;
-
-        while ($y + $this->settings['cell']['size']['height'] <= $printableHeight) {
-            $rowsPerPage++;
-            $y = $this->settings['page']['margin']['top']
-                + $this->settings['cell']['size']['height'] * $rowsPerPage
-                + $this->settings['cell']['spacing']['horizontal'] * ($rowsPerPage + 1);
-        }
-
-        return $rowsPerPage;
+        return count($this->calcDrawEdges('height'));
     }
 
     public function getNrOfCellsPerPage()
@@ -182,36 +149,30 @@ class Labels extends FPDF_EXTENDED
 
     public function getGrid()
     {
-        $rowsPerPage = $this->getNrOfRowsPerPage();
-        $nrOfCols = $this->getNrOfCols();
+        $rows = $this->calcDrawEdges('height');
+        $cols = $this->calcDrawEdges('width');
         $pages = array();
         $page = array();
 
-        foreach (range(0, $this->getNrOfRows()-1) as $row) {
-            foreach (range(0, $nrOfCols-1) as $col) {
-                $rowOnPage = $row - count($pages) * $rowsPerPage;
+        for ($cellCount = 0; $cellCount < count($this->cells); ) {
+            foreach ($rows as $posY) {
+                foreach ($cols as $posX) {
+                    // Make x and y relative to page content box
+                    $page[] = array(
+                        'x' => $posX + $this->pageBox->getContentEdge()->x,
+                        'y' => $posY + $this->pageBox->getContentEdge()->y,
+                        'content' => $this->getCell($cellCount)
+                    );
 
-                if ($rowOnPage >= $rowsPerPage) {
-                    $pages[] = $page;
-                    $page = array();
-                    $rowOnPage = 0;
+                    $cellCount++;
                 }
-                
-                $page[] = array(
-                    'x' => $this->settings['page']['margin']['left']
-                        + $this->settings['cell']['size']['width'] * $col
-                        + $this->settings['cell']['spacing']['vertical'] * $col,
-
-                    'y' => $this->settings['page']['margin']['top']
-                        + $this->settings['cell']['size']['height'] * $rowOnPage
-                        + $this->settings['cell']['spacing']['horizontal'] * ($rowOnPage + 1),
-
-                    'content' => $this->getCell($nrOfCols * $row + $col)
-                );
             }
+
+            // New page
+            $pages[] = $page;
+            $page = array();
         }
 
-        $pages[] = $page;
         return $pages;
     }
 
@@ -222,14 +183,46 @@ class Labels extends FPDF_EXTENDED
         foreach ($this->getGrid() as $page) {
             $this->AddPage();
             foreach ($page as $cell) {
-                $this->SetXY($cell['x'], $cell['y']);
-                $this->MultiCell(
-                    $this->settings['cell']['size']['width'],
-                    $lineHeight,
-                    $cell['content'],
-                    $this->settings['border']
+                $this->SetXY(
+                    $cell['x'] + $this->cellBox->getContentEdge()->x,
+                    $cell['y'] + $this->cellBox->getContentEdge()->y
                 );
+
+                $this->MultiCell(
+                    $this->cellBox->getContentEdge()->width,
+                    $lineHeight,
+                    $cell['content']
+                );
+                
+                if ($this->settings['border']) {
+                    $this->rect(
+                        $cell['x'] + $this->cellBox->getPaddingEdge()->x,
+                        $cell['y'] + $this->cellBox->getPaddingEdge()->y,
+                        $this->cellBox->getPaddingEdge()->width,
+                        $this->cellBox->getPaddingEdge()->height
+                    );
+
+                }
             }
         }
+    }
+
+    /**
+     * @param  string $dimension 'width' or 'height'
+     * @return array  Starting edge values for the chosen dimension
+     */
+    private function calcDrawEdges($dimension)
+    {
+        $data = array();
+
+        for ($iteration = 0; ; $iteration++) {
+            $edge = $this->cellBox->getMarginEdge()->$dimension * ($iteration + 1);
+            if ($edge > $this->pageBox->getContentEdge()->$dimension) {
+                break;
+            }            
+            $data[] = $this->cellBox->getMarginEdge()->$dimension * $iteration;
+        }
+
+        return $data;
     }
 }
