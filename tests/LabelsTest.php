@@ -134,7 +134,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertEquals(16, $labels->getNrOfCellsPerPage());        
+        $this->assertEquals(16, $labels->getNrOfCellsPerPage());
     }
 
     public function testMakePdf()

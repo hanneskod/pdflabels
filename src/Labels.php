@@ -201,7 +201,6 @@ class Labels extends FPDF_EXTENDED
                         $this->cellBox->getPaddingEdge()->width,
                         $this->cellBox->getPaddingEdge()->height
                     );
-
                 }
             }
         }
