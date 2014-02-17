@@ -79,7 +79,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             array(
                 'page' => array(
                     'size' => array('width' => 200),
-                    'margins' => array(
+                    'margin' => array(
                         'left' => 50,
                         'right' => 50,
                     )
@@ -101,7 +101,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             array(
                 'page' => array(
                     'size' => array('width' => 100),
-                    'margins' => array(
+                    'margin' => array(
                         'left' => 0,
                         'right' => 0,
                     )
@@ -121,13 +121,13 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(2, $labels->getNrOfRows());
     }
 
-    public function testGetRowsPerPage()
+    public function testGetNrOfRowsPerPage()
     {
         $labels = new Labels(
             array(
                 'page' => array(
                     'size' => array('height' => 200),
-                    'margins' => array(
+                    'margin' => array(
                         'top' => 0,
                         'bottom' => 0,
                     )
@@ -140,7 +140,38 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->assertEquals(4, $labels->getRowsPerPage());
+        $this->assertEquals(4, $labels->getNrOfRowsPerPage());
+    }
+
+    public function testGetNrOfCellsPerPage()
+    {
+        $labels = new Labels(
+            array(
+                'page' => array(
+                    'size' => array(
+                        'height' => 200,
+                        'width' => 200
+                    ),
+                    'margin' => array(
+                        'top' => 0,
+                        'bottom' => 0,
+                        'left' => 50,
+                        'right' => 50,
+                    )
+                ),
+                'cell' => array(
+                    'size' => array(
+                        'height' => 49,
+                        'width' => 50
+                    ),
+                    'spacing' => array(
+                        'horizontal' => 0,
+                        'vertical' => 0
+                    )
+                )
+            )
+        );
+        $this->assertEquals(8, $labels->getNrOfCellsPerPage());        
     }
 
     public function testGetGrid()
@@ -152,7 +183,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                         'height' => 10,
                         'width' => 10
                     ),
-                    'margins' => array(
+                    'margin' => array(
                         'top' => 0,
                         'left' => 0,
                         'right' => 0,

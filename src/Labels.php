@@ -32,6 +32,7 @@ class Labels extends FPDF_EXTENDED
     private $settings = array(
         'unit' => 'mm',
         'border' => false,
+        'lineHeight' => null,
         'font' => array(
             'family' => 'Arial',
             'size' => 10
@@ -51,7 +52,7 @@ class Labels extends FPDF_EXTENDED
                 'width' => 210,
                 'height' => 297
             ),
-            'margins' => array(
+            'margin' => array(
                 'top' => 10,
                 'right' => 10,
                 'bottom' => 10,
@@ -76,10 +77,10 @@ class Labels extends FPDF_EXTENDED
         $this->SetCreator('pdflabels');
         $this->SetTitle('labels');
         $this->SetFont($this->settings['font']['family'], '', $this->settings['font']['size']);
-        $this->SetMargins(
-            $this->settings['page']['margins']['left'],
-            $this->settings['page']['margins']['top'],
-            $this->settings['page']['margins']['right']
+        $this->Setmargins(
+            $this->settings['page']['margin']['left'],
+            $this->settings['page']['margin']['top'],
+            $this->settings['page']['margin']['right']
         );
         $this->SetAutoPageBreak(false);
     }
@@ -123,14 +124,18 @@ class Labels extends FPDF_EXTENDED
 
     public function getLineHeight()
     {
+        if (isset($this->settings['lineHeight'])) {
+            return $this->settings['lineHeight'];
+        }
+
         return $this->settings['cell']['size']['height'] / $this->getNrOfLinesInLabel();
     }
 
     public function getNrOfCols()
     {
         $printableWidth = $this->settings['page']['size']['width']
-            - $this->settings['page']['margins']['left']
-            - $this->settings['page']['margins']['right'];
+            - $this->settings['page']['margin']['left']
+            - $this->settings['page']['margin']['right'];
 
         $cols = 0;
 
@@ -148,15 +153,15 @@ class Labels extends FPDF_EXTENDED
         return ceil(count($this->cells) / $this->getNrOfCols());
     }
 
-    public function getRowsPerPage()
+    public function getNrOfRowsPerPage()
     {
-        $printableHeight = $this->settings['page']['size']['height'] - $this->settings['page']['margins']['bottom'];
+        $printableHeight = $this->settings['page']['size']['height'] - $this->settings['page']['margin']['bottom'];
         $rowsPerPage = 0;
         $y = 0;
 
         while ($y + $this->settings['cell']['size']['height'] <= $printableHeight) {
             $rowsPerPage++;
-            $y = $this->settings['page']['margins']['top']
+            $y = $this->settings['page']['margin']['top']
                 + $this->settings['cell']['size']['height'] * $rowsPerPage
                 + $this->settings['cell']['spacing']['horizontal'] * ($rowsPerPage + 1);
         }
@@ -164,9 +169,14 @@ class Labels extends FPDF_EXTENDED
         return $rowsPerPage;
     }
 
+    public function getNrOfCellsPerPage()
+    {
+        return $this->getNrOfCols() * $this->getNrOfRowsPerPage();
+    }
+
     public function getGrid()
     {
-        $rowsPerPage = $this->getRowsPerPage();
+        $rowsPerPage = $this->getNrOfRowsPerPage();
         $nrOfCols = $this->getNrOfCols();
         $pages = array();
         $page = array();
@@ -182,11 +192,11 @@ class Labels extends FPDF_EXTENDED
                 }
                 
                 $page[] = array(
-                    'x' => $this->settings['page']['margins']['left']
+                    'x' => $this->settings['page']['margin']['left']
                         + $this->settings['cell']['size']['width'] * $col
                         + $this->settings['cell']['spacing']['vertical'] * $col,
 
-                    'y' => $this->settings['page']['margins']['top']
+                    'y' => $this->settings['page']['margin']['top']
                         + $this->settings['cell']['size']['height'] * $rowOnPage
                         + $this->settings['cell']['spacing']['horizontal'] * ($rowOnPage + 1),
 
