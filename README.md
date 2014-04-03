@@ -3,8 +3,6 @@
 
 Render pdfs using a grid of labels
 
-**License**: [GPL](/LICENSE)
-
 ![Example output](/example/addresses.png)
 
 

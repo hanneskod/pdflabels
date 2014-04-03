@@ -4,7 +4,7 @@
     "keywords": ["label", "pdf"],
     "homepage": "https://github.com/ledgr/pdflabels",
     "type": "library",
-    "license": "GPL",
+    "license": "WTFPL",
     "authors": [
         {
             "name": "Hannes Forsgård",
