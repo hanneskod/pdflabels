@@ -1,8 +1,8 @@
 {
-    "name": "ledgr/pdflabels",
+    "name": "hanneskod/pdflabels",
     "description": "Render pdfs using a grid of labels",
     "keywords": ["label", "pdf"],
-    "homepage": "https://github.com/ledgr/pdflabels",
+    "homepage": "https://github.com/hanneskod/pdflabels",
     "type": "library",
     "license": "WTFPL",
     "authors": [
@@ -13,7 +13,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "ledgr\\pdflabels\\": "src/"
+            "pdflabels\\": "src/"
         }
     },
     "require": {

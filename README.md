@@ -1,33 +1,47 @@
-# PDF-labels [![Latest Stable Version](https://poser.pugx.org/ledgr/pdflabels/v/stable.png)](https://packagist.org/packages/ledgr/pdflabels) [![Build Status](https://travis-ci.org/ledgr/pdflabels.png?branch=master)](https://travis-ci.org/ledgr/pdflabels) [![Code Coverage](https://scrutinizer-ci.com/g/ledgr/pdflabels/badges/coverage.png?s=ea2b5dc71bbb041b5f7a050acf533932e87142a7)](https://scrutinizer-ci.com/g/ledgr/pdflabels/) [![Dependency Status](https://gemnasium.com/ledgr/pdflabels.png)](https://gemnasium.com/ledgr/pdflabels)
-
+PDF Labels
+==========
 
 Render pdfs using a grid of labels
 
-![Example output](/example/addresses.png)
-
-
-Installation using [composer](http://getcomposer.org/)
-------------------------------------------------------
-Simply add `ledgr/pdflabels` to your list of required libraries.
-
-
 Usage
 -----
-    namespace ledgr\pdflabels;
+```php
+$labels = \pdflabels\LabelsFactory::createStd();
 
-    $labels = LabelsFactory::createStd();
+// Grab content
+$content = array(
+    array(
+        "FOO BAR",
+        "BARSTREET 87",
+        "111 11 TOWN"
+    ),
+    array(
+        "BAR FOO",
+        "FOOSTREET 7",
+        "222 22 TOWN"
+    ),
+    array(
+        "FOOBAR",
+        "FOOBARSTREET 31",
+        "111 11 TOWN"
+    )
+);
 
-    foreach ($content as $cell) {
-        $labels->addCell($cell);
-    }
+// Add some cells
+foreach ($content as $cell) {
+    $labels->addCell(implode("\n", $cell));
+}
 
-    echo $labels->getPdf();
+// Generate pdf
+echo $labels->getPdf();
+```
 
-
-Run tests  using [phpunit](http://phpunit.de/)
-----------------------------------------------
-To run the tests you must first install dependencies using composer.
+Testing
+-------
+To run the tests you must first install the dependencies using composer.
 
     $ curl -sS https://getcomposer.org/installer | php
     $ php composer.phar install
     $ phpunit
+
+@author Hannes Forsgård <hannes.forsgard@fripost.org>

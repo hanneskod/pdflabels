@@ -1,6 +1,6 @@
 <?php
 
-namespace ledgr\pdflabels;
+namespace pdflabels;
 
 class LabelsFactoryTest extends \PHPUnit_Framework_TestCase
 {

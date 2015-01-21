@@ -1,20 +1,11 @@
 <?php
-/**
- * This program is free software. It comes without any warranty, to
- * the extent permitted by applicable law. You can redistribute it
- * and/or modify it under the terms of the Do What The Fuck You Want
- * To Public License, Version 2, as published by Sam Hocevar. See
- * http://www.wtfpl.net/ for more details.
- */
 
-namespace ledgr\pdflabels;
+namespace pdflabels;
 
 use fpdf\FPDF_EXTENDED;
 
 /**
  * Write a grid of labels to a pdf
- *
- * @author Hannes Forsgård <hannes.forsgard@fripost.org>
  */
 class Labels extends FPDF_EXTENDED
 {
@@ -143,7 +134,7 @@ class Labels extends FPDF_EXTENDED
         $pages = array();
         $page = array();
 
-        for ($cellCount = 0; $cellCount < count($this->cells); ) {
+        for ($cellCount = 0; $cellCount < count($this->cells);) {
             foreach ($rows as $posY) {
                 foreach ($cols as $posX) {
                     // Make x and y relative to page content box
@@ -203,11 +194,11 @@ class Labels extends FPDF_EXTENDED
     {
         $data = array();
 
-        for ($iteration = 0; ; $iteration++) {
+        for ($iteration = 0;; $iteration++) {
             $edge = $this->cellBox->getMarginEdge()->$dimension * ($iteration + 1);
             if ($edge > $this->pageBox->getContentEdge()->$dimension) {
                 break;
-            }            
+            }
             $data[] = $this->cellBox->getMarginEdge()->$dimension * $iteration;
         }
 
