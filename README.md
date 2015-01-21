@@ -44,4 +44,4 @@ To run the tests you must first install the dependencies using composer.
     $ php composer.phar install
     $ phpunit
 
-@author Hannes Forsgård <hannes.forsgard@fripost.org>
+@author Hannes Forsgård (hannes.forsgard@fripost.org)
